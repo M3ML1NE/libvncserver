@@ -3001,9 +3001,9 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
 	  for(i = start; i < start+msg.mfun.nPartialUpds && i < buf->capacity; ++i) {
 #ifdef MULTICAST_DEBUG
 	    rfbLog("MulticastVNC DEBUG: marking buffer position %u, partial id %u as NACKed\n",
-		   i, partUpdRgnBufAt(buf, i)->idPartial);
+		   i, ((partialUpdRegion*)ghpringbuf_at(buf, i))->idPartial);
 	    rfbLog("                    its sendrate was %d, was decreased %d\n",
-		   partUpdRgnBufAt(buf, i)->sendrate, partUpdRgnBufAt(buf, i)->sendrate_decreased);
+		   ((partialUpdRegion*)ghpringbuf_at(buf, i))->sendrate, ((partialUpdRegion*)ghpringbuf_at(buf, i))->sendrate_decreased);
 #endif
 	    /* mark the lost partial updates as requested */
 	    ((partialUpdRegion*)ghpringbuf_at(buf, i))->pending = TRUE;

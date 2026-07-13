@@ -1284,7 +1284,7 @@ rfbWriteExactMulticast(rfbScreenInfoPtr rfbScreen, const char* buf, int len)
       /*
 	refill send credit based on elapsed time and max send rate
       */
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_CREDIT_DEBUG)
       rfbLog("MulticastVNC DEBUG: wants to write %d, send credit %u\n", len, rfbScreen->multicastSendCredit);
 #endif
       gettimeofday(&now,NULL);
@@ -1302,7 +1302,7 @@ rfbWriteExactMulticast(rfbScreenInfoPtr rfbScreen, const char* buf, int len)
       rfbScreen->lastMulticastSendCreditRefill = now;
 
       UNLOCK(rfbScreen->multicastSharedMutex);
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_CREDIT_DEBUG)
       rfbLog("MulticastVNC DEBUG: send credit increased to %u after %lu ms\n", rfbScreen->multicastSendCredit, elapsed_ms);
 #endif
 
@@ -1329,7 +1329,7 @@ rfbWriteExactMulticast(rfbScreenInfoPtr rfbScreen, const char* buf, int len)
 	    if(++rfbScreen->multicastMaxSendRateIncrementCount % MULTICAST_MAXSENDRATE_INCREMENT_UP_AFTER == 0)
 	      rfbScreen->multicastMaxSendRateIncrement *= MULTICAST_MAXSENDRATE_CHANGE_FACTOR;
 
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_RATE_DEBUG)
 	      rfbLog("MulticastVNC DEBUG: max send rate += %u to %u\n",
 		     rfbScreen->multicastMaxSendRateIncrement,
 		     rfbScreen->multicastMaxSendRate);

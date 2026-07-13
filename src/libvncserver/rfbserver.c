@@ -2979,7 +2979,7 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
 	msg.mfun.idPartialUpd = Swap32IfLE(msg.mfun.idPartialUpd);
 	msg.mfun.nPartialUpds = Swap16IfLE(msg.mfun.nPartialUpds);
 
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_RATE_DEBUG)
 	rfbLog("MulticastVNC DEBUG: got NACK from client %p, pf,enc group %u: %d and %d more missing\n",
 	       cl, cl->multicastPixelformatEncId, msg.mfun.idPartialUpd, msg.mfun.nPartialUpds-1);
 #endif
@@ -2999,7 +2999,7 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
 	  uint32_t significantNACKsInPast = 0;
 
 	  for(i = start; i < start+msg.mfun.nPartialUpds && i < buf->capacity; ++i) {
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_RATE_DEBUG)
 	    rfbLog("MulticastVNC DEBUG: marking buffer position %u, partial id %u as NACKed\n",
 		   i, ((partialUpdRegion*)ghpringbuf_at(buf, i))->idPartial);
 	    rfbLog("                    its sendrate was %d, was decreased %d\n",
@@ -3032,7 +3032,7 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
 	       && ! ((partialUpdRegion*)ghpringbuf_at(buf, i))->sendrate_decreased
 	       && cl->screen->multicastMaxSendRate >= ((partialUpdRegion*)ghpringbuf_at(buf, i))->sendrate) {
 	      uint32_t j;
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_RATE_DEBUG)
 	      uint32_t oldrate = cl->screen->multicastMaxSendRate;
 	      uint32_t oldincr = cl->screen->multicastMaxSendRateIncrement;
 #endif
@@ -3043,7 +3043,7 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
 	      /* reset increment increase counter: we increase the increment after MULTICAST_MAXSENDRATE_INCREMENT_UP_AFTER increments
 		 WITHOUT a send rate decrease in between */
 	      cl->screen->multicastMaxSendRateIncrementCount = 0;
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_RATE_DEBUG)
 	      rfbLog("MulticastVNC DEBUG: max send rate decreased from %u to %u, increment decreased from %u to %u\n",
 		     oldrate,
 		     cl->screen->multicastMaxSendRate,

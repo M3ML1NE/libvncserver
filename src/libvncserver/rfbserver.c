@@ -4436,7 +4436,7 @@ rfbSendMulticastRepairUpdate(rfbClientPtr cl)
 	  UNLOCK(cl->screen->multicastUpdateMutex);
 	  return FALSE;
 	}
-#ifdef MULTICAST_DEBUG
+#if defined(MULTICAST_DEBUG) || defined(MULTICAST_REPAIR_DEBUG)
 	  rfbLog("MulticastVNC DEBUG: sent repair partial upd to pf,enc group %u: wholeId %d, partialId %d\n", cl->multicastPixelformatEncId, pur->idWhole, pur->idPartial);
 #endif
 	LOCK(cl->screen->multicastSharedMutex);

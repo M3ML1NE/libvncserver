@@ -30,12 +30,17 @@
 #ifndef __TURBOJPEG_H__
 #define __TURBOJPEG_H__
 
-#if defined(_WIN32) && defined(DLLDEFINE)
+#ifdef _WIN32
+#if defined(DLLDEFINE)
 #define DLLEXPORT __declspec(dllexport)
 #else
 #define DLLEXPORT
 #endif
 #define DLLCALL
+#else
+#define DLLEXPORT __attribute__((visibility("hidden")))
+#define DLLCALL
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4996)
